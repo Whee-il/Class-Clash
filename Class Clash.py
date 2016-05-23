@@ -338,7 +338,7 @@ class Ship(pygame.sprite.Sprite):
 
         #Movement and barriers
         if key[pygame.K_w] or key[pygame.K_UP]:
-            if key[pygame.K_LSHIFT] or key[pygame.K_RSHIFT]:
+            if key[pygame.K_LSHIFT or pygame.K_RSHIFT]:
                 self.rect.y -= self.speed
 
                 pygame.time.wait(100)
@@ -356,7 +356,7 @@ class Ship(pygame.sprite.Sprite):
                         if self.rect.top < p.rect.bottom:
                             self.rect.top = p.rect.bottom
         if key[pygame.K_s] or key[pygame.K_DOWN]:
-            if key[pygame.K_LSHIFT] or key[pygame.K_RSHIFT]:
+            if key[pygame.K_LSHIFT or pygame.K_RSHIFT]:
                 self.rect.y += self.speed
                 pygame.time.wait(100)
                 self.person_collide(platform_group,character1)
@@ -373,7 +373,7 @@ class Ship(pygame.sprite.Sprite):
                         if self.rect.bottom > p.rect.top:
                             self.rect.bottom = p.rect.top
         if key[pygame.K_a] or key[pygame.K_LEFT]:
-            if key[pygame.K_LSHIFT] or key[pygame.K_RSHIFT]:
+            if key[pygame.K_LSHIFT or pygame.K_RSHIFT]:
                 self.rect.x -= self.speed
                 pygame.time.wait(100)
                 self.person_collide(platform_group,character1)
@@ -391,7 +391,7 @@ class Ship(pygame.sprite.Sprite):
                         if self.rect.left < p.rect.right:
                             self.rect.left = p.rect.right
         if key[pygame.K_d]or key[pygame.K_RIGHT]:
-            if key[pygame.K_LSHIFT] or key[pygame.K_RSHIFT]:
+            if key[pygame.K_LSHIFT or pygame.K_RSHIFT]:
                 self.rect.x += self.speed
                 pygame.time.wait(100)
                 self.person_collide(platform_group,character1)
@@ -407,8 +407,6 @@ class Ship(pygame.sprite.Sprite):
                     if pygame.sprite.collide_rect(self, p):
                         if self.rect.right > p.rect.left:
                             self.rect.right = p.rect.left
-        if key[pygame.K_i]:
-            sys.exit()
         #self.collide(self.rect.x,self.rect.y,platform_group)
         #Screen
         #if self.rect.top < 0:
@@ -472,7 +470,17 @@ class Platform(pygame.sprite.Sprite):
         if col == "D":
             self.image.fill(BROWN)
         if col == "L":
+            self.image = (pygame.image.load("image/Comp_L.png"))
+            self.image = pygame.transform.scale(self.image, (32,32))
+        if col == "R":
+            self.image = (pygame.image.load("image/Comp_R.png"))
+            self.image = pygame.transform.scale(self.image, (32,32))
+        if col == "B":
+            self.image = (pygame.image.load("image/Comp_B.png"))
+            self.image = pygame.transform.scale(self.image, (32,32))
+        if col == "T":
             self.image.fill(YELLOW)
+
         if col == "1":
             self.image.fill(ORANGE)
         if col == "2":
@@ -587,8 +595,7 @@ def battle(character1,character2):
                 blitname = smallfont.render(character1.name + " used " + character1.move1name, 1, BLACK)
                 p1go = True
                 p1d = p1damage*171*.01
-                if p1go == True:
-                    character2healthamount -= p2d
+
                 blitmove = smallfont.render(("It did "+ str(p2d)+"damage"),1,BLACK)
                 screen.blit(blitmove,blitmovepos)
                 screen.blit(screenimage,(0,0))
@@ -662,8 +669,7 @@ def battle(character1,character2):
                 blitname = smallfont.render(character1.name + " used " + character1.move2name, 1, BLACK)
                 p1go = True
                 p1d = p1damage*171*.01
-                if p1go == True:
-                    character2healthamount -= p2d
+
                 blitmove = font.render(("It did " + str(p2d) + "damage"),1,BLACK)
                 screen.blit(blitmove,blitmovepos)
                 screen.blit(screenimage,(0,0))
@@ -735,8 +741,7 @@ def battle(character1,character2):
                 blitname = smallfont.render(character1.name + " used " + character1.move3name, 1, BLACK)
                 p1go = True
                 p1d = p1damage*171*.01
-                if p1go == True:
-                    character2healthamount -= p2d
+
                 blitmove = font.render(("It did " + str(p2d) + "damage"),1,BLACK)
                 screen.blit(blitmove,blitmovepos)
                 screen.blit(screenimage,(0,0))
@@ -809,8 +814,7 @@ def battle(character1,character2):
                 blitname = smallfont.render(character1.name + " used " + character1.move4name, 1, BLACK)
                 p1go = True
                 p1d = p1damage*171*.01
-                if p1go == True:
-                    character2healthamount -= p2d
+
                 blitmove = font.render(("It did " + str(p2d) + "damage"),1,BLACK)
                 screen.blit(blitmove,blitmovepos)
                 screen.blit(screenimage,(0,0))
@@ -884,8 +888,11 @@ def battle(character1,character2):
                 screen.blit(move3text,move3textpos)
                 screen.blit(move4text,move4textpos)
 
-        p2d = p2damage*171*.01
 
+
+        p2d = p2damage*171*.01
+        if p1go == True:
+            character2healthamount -= p2d
         if p2go == True:
             character1healthamount -= p1d
         if character1health < 1:
@@ -929,6 +936,7 @@ def battle(character1,character2):
 
         #Writes to surface
         pygame.display.flip()
+
 def main():
 
     #variables
@@ -957,38 +965,44 @@ def main():
         "PPPPPPPPPPPPPPPPPPPPPPP",
         "P                     P",
         "P                     D",
-        "P          L          P",
-        "P        PPCPP       1C",
+        "P          T          P",
+        "P        PPBPP       1R",
         "P        PPPPP        P",
-        "P        PPPPP       2C",
+        "P        PPPPP       2R",
         "P        PPPPP        P",
-        "P        PPPPP       3C",
+        "P        PPPPP       3R",
         "P        PPPPP        P",
-        "P        PPPPC+      4C",
+        "P        PPPPL+      4R",
         "P        PPPPP        P",
-        "P        PPPPC-      5C",
+        "P        PPPPL-      5R",
         "P        PPPPP        P",
-        "P        PPPPC0      6C",
+        "P        PPPPL0      6R",
         "P        PPPPP  9 8 7 P",
-        "PPPPPPPPPPPPPPPPCPCPCPP", ]
+        "PPPPPPPPPPPPPPPPBPBPBPP", ]
     x = y = 0
     for row in Room:
         for col in row:
             if col == "P":
                 p = Platform(x,y,col)
                 platform_group.add(p)
-            if col == "C":
-                c = Platform(x,y,col)
-                platform_group.add(c)
+            if col == "L":
+                l = Platform(x,y,col)
+                platform_group.add(l)
+            if col == "R":
+                r = Platform(x,y,col)
+                platform_group.add(r)
+            if col == "B":
+                b = Platform(x,y,col)
+                platform_group.add(b)
             if col == "H":
                 h = Platform(x,y,col)
                 platform_group.add(h)
             if col == "D":
                 d = Platform(x,y,col)
                 platform_group.add(d)
-            if col == "L":
-                l = Platform(x,y,col)
-                platform_group.add(l)
+            if col == "T":
+                t = Platform(x,y,col)
+                platform_group.add(t)
             if col == "1":
                 arthur = Platform(x,y,col)
                 platform_group.add(arthur)
